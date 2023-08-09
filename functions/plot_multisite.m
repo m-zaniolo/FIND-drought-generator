@@ -3,7 +3,7 @@ function plot_multisite(ssi_obs, ssi_obs2, ssi_synth, ssi_synth2, date, param)
 hist_color   = [19, 108, 173]/256; % blue
 synth_color  = [185, 76, 69]/256;  % red
 obs2_color   = [1, 0.8398, 0];     % gold
-synth2_color = rgb('green');
+synth2_color = [0 0.5 0];          % green
 
 f = figure;
 f.Position = [100 100 1250 400];
