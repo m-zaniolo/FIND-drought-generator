@@ -4,7 +4,8 @@ addpath functions
 rng(0); %reset random number generator for reproducibility
 
 %% load data
-[date, obs] = importprecip('Big Bend CA.txt'); %stream_smith_crescent.txt'); 
+obs  = load('Big Bend_1945_2022.txt');
+date = datetime(1945,1,1)+calmonths(0:length(obs)-1)'; 
 
 % Cut time series to eliminate any spare months that don't belong to a full
 % year of data
