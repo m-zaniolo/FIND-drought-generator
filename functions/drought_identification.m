@@ -1,4 +1,4 @@
-function [persistence, intensity, frequency, index , drought_start_end] = drought_identification(data_ref, data_to_calc, min_drought_intensity, min_drought_duration, ssi_time_scale, nmonths_end_drought)
+function [persistence, intensity, frequency, index , drought_start_end] = drought_identification(data_ref, data_to_calc, min_drought_intensity, min_drought_duration, ssi_time_scale, nmonths_end_drought, distribution)
 
 Ny     = length(data_ref)/12; 
 year   = reshape( repmat(1:Ny, 12,1), Ny*12, 1); 
@@ -14,7 +14,7 @@ year   = reshape( repmat(1:Ny, 12,1), Ny*12, 1);
 month  = repmat([1:12]', Ny, 1 ); 
 input_calc = [year, month, data_to_calc]; % prepare the input matrix 
 
-sri = calc_drought_index(input_ref, time_scale, method_name, input_calc);
+sri = calc_drought_index(input_ref, time_scale, method_name, input_calc, distribution);
 sri.index_value(sri.index_value<-4) = -4;
 sri.index_value(sri.index_value>4)  = 4;
 

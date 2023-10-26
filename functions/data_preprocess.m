@@ -1,9 +1,5 @@
 function [processedData, dateVec_new] = data_preprocess(data_old, dateVec_old, time_scale)
 % function processedData = data_preprocess(data_old)
-% i dati in ingresso sono mensili e vengono processati per rimuovere il
-% rumore, è inoltre possibile aggregarli in dati stagionali o comunque di
-% più mesi 
-
 % Input:
 %            data_old - monthly time-series data
 %         dateVec_old - date vector, with first column representing the

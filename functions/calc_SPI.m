@@ -24,7 +24,6 @@ function index_SPI = calc_SPI(data_ref, useMethod, varargin)
 
 % -- Prepare the data --
 data_to_calc = data_ref;
-% useMethod = 'gamma';
 
 if (nargin > 2)
   data_to_calc = varargin{1};
@@ -40,7 +39,7 @@ no_obs = length(data_ref);
 
 if strcmpi(useMethod, 'gamma')
   accPdf = calc_cdf_gamma(data_ref, data_to_calc);
-  % elseif strcmpi(useMethod, 'pearsonIII')
+  
 elseif strcmpi(useMethod, 'PearsonIII')  
   LMoments = pwm_Unbiased(data_ref);
   param_pearsonIIIPdf = calc_param_pearsonIII(LMoments);

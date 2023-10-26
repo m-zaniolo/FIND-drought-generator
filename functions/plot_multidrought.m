@@ -63,7 +63,7 @@ cc = colormap(gca, c);
 a.FaceAlpha = 0.9;
 for k = 1:25
     for kk = 1:param.n_scenarios
-        [duration, intensity] = drought_identification(obs, synth_flow_all(:,(k-1)*param.n_scenarios + kk), param.min_drought_intensity, param.min_drought_duration, param.ssi_time_scale, param.nmonths_end_drought );
+        [duration, intensity] = drought_identification(obs, synth_flow_all(:,(k-1)*param.n_scenarios + kk), param.min_drought_intensity, param.min_drought_duration, param.ssi_time_scale, param.nmonths_end_drought, param.distribution );
         scatter(duration, intensity, 60, cc(k,:), 'filled', 'MarkerEdgeColor', 'k'); %c(k,4)
     end
 end
@@ -95,7 +95,7 @@ subplot(211)
 id_short_intense = length(ccI)*param.n_scenarios + 1; % index of drought scenario with shortest duration and highest intensity
 prec = synth_flow_all(:, id_short_intense); 
 
-[~, ~, n_droughts, ssi, drought_start_end] = drought_identification( obs,prec, param.min_drought_intensity, param.min_drought_duration, param.ssi_time_scale, param.nmonths_end_drought );
+[~, ~, n_droughts, ssi, drought_start_end] = drought_identification( obs,prec, param.min_drought_intensity, param.min_drought_duration, param.ssi_time_scale, param.nmonths_end_drought, param.distribution );
     ssi = [zeros(param.ssi_time_scale-1,1); ssi]; %SSI timeseries is ssi_time_scale month shorter than streamflow index because of aggregation
     
     % Plot the SSI values for the synthetic scenario
@@ -132,7 +132,7 @@ prec = synth_flow_all(:, id_short_intense);
 subplot(212)
 id_long_mild = length(ccI)*(length(ccD)-1)*param.n_scenarios + 1; % index of drought scenario with longest duration and mildest intensity
 prec = synth_flow_all(:, id_long_mild);
-[~, ~, n_droughts, ssi, drought_start_end] = drought_identification( obs,prec, param.min_drought_intensity, param.min_drought_duration, param.ssi_time_scale,param.nmonths_end_drought  );
+[~, ~, n_droughts, ssi, drought_start_end] = drought_identification( obs,prec, param.min_drought_intensity, param.min_drought_duration, param.ssi_time_scale,param.nmonths_end_drought , param.distribution );
     ssi = [zeros(param.ssi_time_scale-1,1); ssi]; %SSI timeseries is 11 month shorter than streamflow index because of aggregation
     
     % Plot the SSI values for the synthetic scenario

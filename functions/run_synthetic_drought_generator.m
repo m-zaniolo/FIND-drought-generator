@@ -44,7 +44,7 @@ w = param.w;
 autocorr_hist = correlogram( obs, obs, 12);
 
 % Calculate the Standardized Streamflow Index (SSI) and the drought occurrence time of the input time series
-[~, ~, ~, ssi_obs , drought_start_end_obs] = drought_identification(obs, obs, min_intensity, min_duration, time_scale, nmonths_end_drought);  % compute SRI from streamflow data
+[~, ~, ~, ssi_obs , drought_start_end_obs] = drought_identification(obs, obs, min_intensity, min_duration, time_scale, nmonths_end_drought, param.distribution);  % compute SRI from streamflow data
 obs1_m      = reshape(obs, 12, nyear_inrecord);
 
 % Find non-drought periods and calculate observed 25th, 50th, and 75th percentile
@@ -75,20 +75,36 @@ for hh = 1:n_scenarios
         % for every month, fit monthly data to distribution and extract random value
         for month = 1:12
           u = rand(1, Ny);
-          LMoments = pwm_Unbiased(obs1_m(month,:)');
-          param_pearsonIIIPdf = calc_param_pearsonIII(LMoments);
-          accPdf = calc_cdf_pearsonIII(param_pearsonIIIPdf, obs1_m(month,:)');
-    
+          accPdf = fit_distribution(obs1_m(month,:)', param.distribution); % choose 'gamma' or 'Pearson III' distributions
+
           os(:, month)  = sort(obs1_m(month,:)');
           acs(:, month) = sort(accPdf);
           [~, un] = unique(acs(:, month));
           un_month{month} = un;
           xr(month, :) = interp1(acs(un, month),os(un, month),u,[],'extrap');
+
+          
+
     
         end
+
         % obtain inizialized synthetic time series
         synth_flow = reshape(xr, [], 1); 
-        [duration_all] = drought_identification(obs, synth_flow, min_intensity, min_duration, time_scale, nmonths_end_drought); 
+
+        % K-S test of synthetic data:
+        isFit = kstest2(sort(obs) ,sort(synth_flow));
+        if param.flag_visualize_optimization
+            if hh == 1
+                if isFit
+                    fprintf('The K-S test fails to reject the null hypothesis at a default 5 percent significance level. The probability distribution selected to approximate the data is appropriate')
+                else
+                    fprintf('The K-S test rejects the null hypothesis at a default 5 percent significance level')
+                end
+            end
+        end
+
+
+        [duration_all] = drought_identification(obs, synth_flow, min_intensity, min_duration, time_scale, nmonths_end_drought, param.distribution); 
     end
     %% Optimization portion
 
@@ -147,7 +163,7 @@ for hh = 1:n_scenarios
                 if i == 2 % in first iteration, compute intensity, persistence, frequency pre- and post-swap
                   [Ointensity_prev, Oduration_prev, Ondroughts_prev, Oautocorr_prev, Onon_drought_distrib_prev] = calculate_objectives(obs, ...
                       g(1,:)', min_intensity, min_duration, time_scale, nmonths_end_drought, target_intensity, target_duration, target_ndroughts, ...
-                      autocorr_hist, non_drought_distrib_hist);
+                      autocorr_hist, non_drought_distrib_hist, param.distribution);
     
                 elseif as == 1 % if swap in previous iteration is accepted
                     Ointensity_prev           = Ointensity_swap;
@@ -185,7 +201,7 @@ for hh = 1:n_scenarios
                 %% calculate objectives of swapped time series
                   [Ointensity_swap, Oduration_swap, Ondroughts_swap, Oautocorr_swap, Onon_drought_distrib_swap] = calculate_objectives(obs, ...
                       g(2,:)', min_intensity, min_duration, time_scale, nmonths_end_drought, target_intensity, target_duration, target_ndroughts, ...
-                      autocorr_hist, non_drought_distrib_hist);
+                      autocorr_hist, non_drought_distrib_hist, param.distribution);
     
     
                 %% calculate partial and aggregate objective function for previous and swapped cases
@@ -264,7 +280,7 @@ end
 obj   = O(:,end);
 synth_flow  = simonth';
 for hh = 1:n_scenarios
-    [duration, int, ndroughts(hh), synth_ssi(:,hh)] = drought_identification(obs, synth_flow(:,hh), min_intensity, min_duration, time_scale, nmonths_end_drought);
+    [duration, int, ndroughts(hh), synth_ssi(:,hh)] = drought_identification(obs, synth_flow(:,hh), min_intensity, min_duration, time_scale, nmonths_end_drought, param.distribution);
     duration_sim(hh)  = mean(duration);
     intensity_sim(hh) = mean(int);
 end

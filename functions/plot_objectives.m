@@ -28,7 +28,7 @@ plot([0:12], autocorr_hist, LineWidth=2, Color=hist_color);
 subplot(515); hold on;
 
 [~, ~, ~, ssi_hist, drought_start_end] = drought_identification(obs, ...
-        obs, param.min_drought_intensity, param.min_drought_duration, param.ssi_time_scale, param.nmonths_end_drought);
+        obs, param.min_drought_intensity, param.min_drought_duration, param.ssi_time_scale, param.nmonths_end_drought, param.distribution);
 
 non_drought_periods = ones(length(ssi_hist), 1);
 for i = 1:size(drought_start_end, 1)
@@ -45,7 +45,7 @@ plot([-1:n_scenarios+1], repmat(non_drought_distrib_h(3), 1, n_scenarios+3), 'k-
 
 % plot historical drought properties
 [duration_all, int_all, ndroguths_all, ssi_synth, drought_start_end] = drought_identification(obs, ...
-    obs, param.min_drought_intensity, param.min_drought_duration, param.ssi_time_scale, param.nmonths_end_drought);
+    obs, param.min_drought_intensity, param.min_drought_duration, param.ssi_time_scale, param.nmonths_end_drought, param.distribution);
 
 subplot(511);
 scatter(zeros(size(int_all)), int_all, 'filled', MarkerFaceColor=hist_color, MarkerEdgeColor='none')
@@ -62,7 +62,7 @@ scatter(0, non_drought_distrib_h, 'filled', MarkerFaceColor=hist_color, MarkerEd
 % calculate and plot and objectives in all scenarios
 for i = 1:n_scenarios
     [duration_all, int_all, ndroguths_all, ssi_synth, drought_start_end] = drought_identification(obs, ...
-        synthetic_flow(:,i), param.min_drought_intensity, param.min_drought_duration, param.ssi_time_scale, param.nmonths_end_drought);
+        synthetic_flow(:,i), param.min_drought_intensity, param.min_drought_duration, param.ssi_time_scale, param.nmonths_end_drought, param.distribution);
 
         subplot(511);
         scatter(i, int_all, 'filled', MarkerFaceColor=synth_color, MarkerEdgeColor='none')

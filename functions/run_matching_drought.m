@@ -67,7 +67,7 @@ for hh = 1:n_scenarios
         end
     
         synth_flow = reshape(xr, [], 1);
-        [duration_all] = drought_identification(obs, synth_flow, min_intensity, min_duration, time_scale, nmonths_end_drought); % check there is at least one drought in the initial random extraction
+        [duration_all] = drought_identification(obs, synth_flow, min_intensity, min_duration, time_scale, nmonths_end_drought, param.distribution); % check there is at least one drought in the initial random extraction
     end
     %% SIMULATED ANNEALING
 
@@ -120,7 +120,7 @@ for hh = 1:n_scenarios
                 %% calculate statistics of old and swaped time series
     
                 if i == 2 % in first iteration, compute SSI
-                  [~, ~, ~, ssi_prev] = drought_identification(obs, g(1,:)', min_intensity, min_duration, time_scale, nmonths_end_drought);  % returns intensity and persistence of all the detected droughts
+                  [~, ~, ~, ssi_prev] = drought_identification(obs, g(1,:)', min_intensity, min_duration, time_scale, nmonths_end_drought, param.distribution);  % returns intensity and persistence of all the detected droughts
     
                 elseif as == 1 % if swap in previous iteration is accepted
                     ssi_prev   = ssi_swap;
@@ -151,7 +151,7 @@ for hh = 1:n_scenarios
                 g(2,r:r+nmonth-1) = disagg ; 
     
                 %% calculate statistics after swapping
-                  [~, ~, ~, ssi_swap] = drought_identification(obs, g(2,:)', min_intensity, min_duration, time_scale, nmonths_end_drought); 
+                  [~, ~, ~, ssi_swap] = drought_identification(obs, g(2,:)', min_intensity, min_duration, time_scale, nmonths_end_drought, param.distribution); 
                   
     
                 %% calculate value of aggregate objective function for swapped and unchanged cases
@@ -215,5 +215,5 @@ obj   = O(:,end);
 synth_flow  = simonth';
 
 for hh = 1:n_scenarios
-    [~, ~, ~, synth_ssi(:,hh)] = drought_identification(obs, synth_flow(:,hh), min_intensity, min_duration, time_scale, nmonths_end_drought);
+    [~, ~, ~, synth_ssi(:,hh)] = drought_identification(obs, synth_flow(:,hh), min_intensity, min_duration, time_scale, nmonths_end_drought, param.distribution);
 end

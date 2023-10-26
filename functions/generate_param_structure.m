@@ -5,6 +5,7 @@ function param = generate_param_structure()
 % for guidelined on how to set these parameters.
 
 %% parameters used for experiment 1 and 2 
+param.distribution          = 'PearsonIII'; %or 'gamma'. This is the probability distribution to fit data and calculate SSI. 
 param.min_drought_duration  = 32; % minimum drought duration
 param.min_drought_intensity = -0.6; % minimum drought intensity
 param.ssi_time_scale        = 12; % aggregation time in months for SSI calculation 

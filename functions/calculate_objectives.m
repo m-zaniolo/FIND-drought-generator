@@ -1,6 +1,6 @@
 function [Ointensity, Oduration, On_droughts, Oautocorr, Onon_drought_distrib] = ...
     calculate_objectives(obs, synth_flow, min_intensity, min_duration, time_scale, nmonths_end_drought,...
-    target_int, target_pers, target_ndroguths, autocorr_hist, non_drought_distrib_hist)
+    target_int, target_pers, target_ndroguths, autocorr_hist, non_drought_distrib_hist, distribution)
 % This function calculates the search objectives defined as follows:
 % Ointensity: mean deviation between the intensity of each drought occurrence
 %             in the synthetic scenario and the desired drought intensity
@@ -17,7 +17,7 @@ function [Ointensity, Oduration, On_droughts, Oautocorr, Onon_drought_distrib] =
 
 % calculate drought index and statistics for synthetic flow time series
 [duration_all, int_all, ndroguths_all, spi, drought_start_end] = drought_identification(...
-    obs, synth_flow, min_intensity, min_duration, time_scale, nmonths_end_drought);  
+    obs, synth_flow, min_intensity, min_duration, time_scale, nmonths_end_drought, distribution);  
 
 %% calculate objectives
 Ointensity  = mean(abs([int_all, mean(int_all)] - target_int));

@@ -1,5 +1,5 @@
 function results_summary = calc_drought_index(data_ref, time_scale, indicator_name, varargin)
-%RESULTS_SUMMARY   control function for droughti index toolbox
+%RESULTS_SUMMARY   control function for drought index toolbox
 %
 %   CALC_DROUGHT_INDEX(data_ref, time_scale, indicator_name, varargin)
 %   calculate the drought index given the input data and specified method
@@ -23,25 +23,24 @@ data_to_calc = data_ref;
 if nargin > 3 
     data_to_calc = varargin{1};
 end
+if nargin > 4
+    distribution = varargin{2};
+else 
+    distribution = 'PearsonIII';
+end
     
+    
+if ~strcmpi(distribution, 'gamma')
+    if ~strcmpi(distribution, 'PearsonIII')
+        fprintf('Undefined distribution. Using Pearson III instead')
+        distribution = 'PearsonIII';
+    end
+end
+
 if strcmpi(indicator_name, 'SPI')
   fooHandle = @calc_SPI;
-  if nargin > 4
-    UseMethod = varargin{1};
-  else
-    UseMethod = 'PearsonIII'; 
-  end  
-  
-elseif strcmpi(indicator_name, 'SPEI')
-  fooHandle = @calc_SPEI;
-  if nargin > 4
-    UseMethod = varargin{1};
-  else
-    UseMethod = 'pwm_ub';
-  end
-  
-else
-  error('Method undefined!')
+  UseMethod = distribution;
+
 end
 
 %fprintf(1, ['Calculating the %s index now. Estimating the parameters', ...
