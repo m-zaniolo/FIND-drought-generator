@@ -5,7 +5,7 @@ rng(0); %reset random number generator for reproducibility
 
 %% load data
 obs  = load('Big Bend_1945_2022.txt');
-date = datetime(1945,1,1)+calmonths(0:length(obs)-1)'; 
+date = datetime(1945,1,1)+calmonths(0:length(obs)-1)';
 
 % Cut time series to eliminate any spare months that don't belong to a full
 % year of data
@@ -20,7 +20,7 @@ param.flag_visualize_optimization = 0; % set to 1 to visualize the ongoing progr
 
 %% experiment 3: generate a set of scenarios with varyinf drought characteristics of intensity and duration
 % extract historical drought characteristics
-[duration_obs, intensity_obs, n_droughts_obs, ssi_obs] = drought_identification(obs, obs, param.min_drought_intensity, param.min_drought_duration, param.ssi_time_scale, param.nmonths_end_drought);
+[duration_obs, intensity_obs, n_droughts_obs, ssi_obs] = drought_identification(obs, obs, param.min_drought_intensity, param.min_drought_duration, param.ssi_time_scale, param.nmonths_end_drought, param.distribution);
 
 ccD = [0.75, 1, 1.25, 1.5, 1.75]; %drought duration multiplier. 
 ccI = [0.75, 1, 1.25, 1.5, 1.75]; %drought intensity multiplier. 

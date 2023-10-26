@@ -21,13 +21,13 @@ param.flag_visualize_optimization = 0; % set to 1 to visualize the ongoing progr
 %% define user-set drought parameters
 % extract historical drought characteristics
 [duration_obs, intensity_obs, n_droughts_obs, ssi_obs] = drought_identification(obs, obs, ...
-    param.min_drought_intensity, param.min_drought_duration, param.ssi_time_scale, param.nmonths_end_drought);
+    param.min_drought_intensity, param.min_drought_duration, param.ssi_time_scale, param.nmonths_end_drought, param.distribution);
 
 % include in param the desired drought parameters
 param.target_duration   = mean(duration_obs);
 param.target_intensity  = mean(intensity_obs);
 param.target_ndroughts  = round( n_droughts_obs/Ny *param.nyear_togenerate) ;
-param.n_scenarios       = 10;
+param.n_scenarios       = 3;
 
 % some checks on data quality and selected characteristics 
 check_drought_characteristics(obs, param)
@@ -59,7 +59,7 @@ obs2 = obs2(idx2);
 
 % calculate SSI of site 2
 [~, ~, ~, ssi_obs2] = drought_identification(obs2, obs2, ...
-    param.min_drought_intensity, param.min_drought_duration, param.ssi_time_scale, param.nmonths_end_drought);
+    param.min_drought_intensity, param.min_drought_duration, param.ssi_time_scale, param.nmonths_end_drought, param.distribution);
 ssi_obs = ssi_obs( 1 + length(ssi_obs) - length(ssi_obs2):length(ssi_obs) );
 
 % identify correlation between the 2 sites, defined as sum of squared
