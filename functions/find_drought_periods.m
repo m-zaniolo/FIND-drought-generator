@@ -44,7 +44,7 @@ function [duration, intensity, frequency, drought_start_end] = find_drought_peri
                 p_count = p_count + 1;
                 
                 if p_count >= nmonths_end_drought % End of drought period
-                    end_dates(end+1) = endd;
+                    end_dates(end+1) = endd-1;
                     drought = 0; 
                     p_count = 0;
                     n_count = 0;
